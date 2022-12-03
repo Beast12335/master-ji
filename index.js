@@ -64,7 +64,6 @@ cron.schedule('0 6 * * Monday',() => {
       }
     ]
   });
-  }
       await sleep(500)
     }
 })();
@@ -94,7 +93,7 @@ cron.schedule('0 8 * * Friday',() => {
 
 
 (async function () {
-  await beast.login({email:process.env.mail,password:process.env.pass,keyName:'test'})
+  await beast.login({email:process.env.mail,password:process.env.pass,keyName:'tata'})
     await beast.events.init();
 })();
 client.login(mySecret)
