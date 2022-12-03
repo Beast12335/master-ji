@@ -1,1 +1,44 @@
-
+{
+  "name": "easy_modmail_bot",
+  "version": "1.0.2",
+  "description": "A simple Multi Guild Modmail Bot coded in v13 using the enmap Database Working on any host, like repl.it or vps! Its fast and working bug free + Security options!",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^14.5.0",
+    "lib":"^4.3.3",
+    "clashofclans.js":"^2.8.4",
+    "node-cron":"^3.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tomato6966/Multiguild-Modmail.git"
+  },
+  "keywords": [
+    "Modmail",
+    "Discord",
+    "bot",
+    "Discordjs",
+    "Discord-js",
+    "v13",
+    "Discordv13",
+    "Latest",
+    "Mod-mail",
+    "Easy",
+    "Fast",
+    "Free",
+    "Replit",
+    "Repl.it",
+    "OP"
+  ],
+  "author": "Tomato#6966",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Beast12335/beast-/issues"
+  },
+  "homepage": "https://github.com/Beast12335/beast-#readme"
+}
