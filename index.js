@@ -38,11 +38,33 @@ cron.schedule('0 6 * * Monday',() => {
     query: `select * from master where channel  != '0';`,
     charset: `UTF8MB4`
   });
-    for (let i =0;i<i.test.result.length;i++) {
-      let b = await lib.discord.channels['@0.3.2'].messages.create({
-        channel_id: `1047679692632768512`,
-        content: `<@1024354105105334282> ${a.result[i].channel} ${a.result[i].clan}`
-    });
+    for (let i =0;i<test.result.length;i++) {
+      let clan = await client.getClan(test.result[i].clan)
+      let members = clan.members
+      let send = []
+      let u = await client.getCapitalRaidSeasons(test.result[i].clan) 
+      let t = u[0].members
+      for (let i=0;i<members.length;i++) {
+        if (!(members[i] in t)){
+          send.push(members[i].name) 
+          } }
+      await lib.discord.channels['@0.3.2'].messages.create({
+        channel_id: test.result[i].channel,
+        content: ` `,
+        embeds: [
+          {
+          'type': `rich`,
+          'title': `Missed raid attacks for ${clan.name}`,
+          'description': send.map((u,index) =>{
+          return JSON.stringify(index+1).padStart(2,' ') + u}).join('\n'), 
+          'color': 0x00ff00,
+          'thumbnail': {
+          url:clan.badge.url
+          }
+      }
+    ]
+  });
+  }
       await sleep(500)
     }
 })();
@@ -65,7 +87,6 @@ cron.schedule('0 8 * * Friday',() => {
         console.log(`dm sent to ${test.result[i].dc}`)
       }catch(e) {
         console.log(e) }
-  }
       await sleep(250) 
 }
 })();
