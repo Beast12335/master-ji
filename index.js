@@ -30,13 +30,7 @@ const beast = new ClashClient()
 
 var cron = require('node-cron');
 console.log('hello')
-cron.schedule('*/2 * * * *', () => {
-  console.log('running every minute to 1 from 5');
-  return lib.discord.channels['@0.3.2'].messages.create({
-  channel_id: `860512303233236995`,
-  content: `<@849123406477656086>`
-})
-});
+//miss rmd
 cron.schedule('0 6 * * Monday',() => {
   console.log('sending cc missers');
   (async function (){
@@ -49,7 +43,7 @@ cron.schedule('0 6 * * Monday',() => {
         channel_id: `1047679692632768512`,
         content: `<@1024354105105334282> ${a.result[i].channel} ${a.result[i].clan}`
     });
-    await sleep(500)
+      await sleep(500)
     }
 })();
 });
@@ -67,7 +61,7 @@ cron.schedule('0 8 * * Friday',() => {
         channel_id: `1048112551252205569`,
           content: `<@1024354105105334282> ${test.result[i].dc}`
   });
-    await sleep(250) 
+      await sleep(250) 
 }
 })();
 });
