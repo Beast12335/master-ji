@@ -57,10 +57,15 @@ cron.schedule('0 8 * * Friday',() => {
     charset: `UTF8MB4`
 });
     for (let i=0;i<test.result.length;i++) {
-      await lib.discord.channels['@0.3.2'].messages.create({
-        channel_id: `1048112551252205569`,
-          content: `<@1024354105105334282> ${test.result[i].dc}`
-  });
+      try{
+        await lib.discord.users['@0.2.1'].dms.create({
+          recipient_id: test.result[i].dc, 
+          content: `Clan capital raids are about to start. Get ready to rock the leaderboard 🤟`
+    });
+        console.log(`dm sent to ${test.result[i].dc}`)
+      }catch(e) {
+        console.log(e) }
+  }
       await sleep(250) 
 }
 })();
