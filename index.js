@@ -114,15 +114,15 @@ cron.schedule('*/5 * * * *', () => {
     });
     for (let i = 0; i < a.result.length; i++) {
       try {
-        var state = await beast.getClanWar(a.result[i].clan);
+        var clan = await beast.getClanWar(a.result[i].clan);
       } catch (e) {
         if (e.reason === 'notInWar') {
           continue;
         }
         console.log(e);
       }
-      if (a.result[i].new === state.state) {
-        console.log(a.result[i].new === state.state);
+      if (a.result[i].new === clan.state) {
+        console.log(a.result[i].new === clan.state);
         continue;
       } else {
         await lib.mysql.db['@0.2.1'].query({
@@ -130,7 +130,7 @@ cron.schedule('*/5 * * * *', () => {
           charset: `UTF8MB4`,
         });
         await lib.mysql.db['@0.2.1'].query({
-          query: `update master set new = '${state.state}' where clan = '${a.result[i].clan}';`,
+          query: `update master set new = '${clan.state}' where clan = '${a.result[i].clan}';`,
           charset: `UTF8MB4`,
         });
         console.log('values changed ');
