@@ -106,7 +106,7 @@ cron.schedule('0 8 * * Friday', () => {
 cron.schedule('*/5 * * * *', () => {
   console.log('fetching wars');
   (async function myTimer() {
-    console.log('hemlo  ');
+    //console.log('hemlo  ');
     console.log(new Date().toLocaleString('en-US', {timeZone: 'Asia/Kolkata'}));
     let a = await lib.mysql.db['@0.2.1'].query({
       query: `select * from master;`,
@@ -165,14 +165,14 @@ cron.schedule('*/5 * * * *', () => {
                 'type': `rich`,
                 'title': ` `,
                 'color': 0x00ff00,
-                'description': `The war has ended. Final result: ${clan.clan.name} ⭐ ${clan.clan.stars} (${clan.clan.destruction}) - ${clan.opponent.stars} (${clan.opponent.destruction}) ${clan.opponent.name}`
+                'description': `The war has ended. Final result: ${clan.clan.name} ⭐ ${clan.clan.stars} (${clan.clan.destruction}%) - ${clan.opponent.stars}⭐ (${clan.opponent.destruction}%) ${clan.opponent.name}`
               }
             ]
           });
           for (let j = 0; j < attacks.length; j++) {
             console.log('adding stats');
             await lib.mysql.db['@0.2.1'].query({
-              query: `insert into players values('attacks[j].attackerTag','attacks[j].attacker.name','attacks[j].attacker.townHallLevel','attacks[j].order','attacks[j].attackerTag','attacks[j].defenderTag','attacks[j].stars','0','attacks[j].destruction','attacks[j].defender.mapPosition',attacks[j].defender.townHallLevel','attacks[j].defender.clan.tag',attacks[j].attacker.clan.tag','attacks[j].clan.level','attacks[j].defender.clan.level','clan.startTime','clan.teamSize');`,
+              query: `insert into players values('attacks[j].attackerTag','attacks[j].attacker.name','attacks[j].attacker.townHallLevel','attacks[j].order','attacks[j].attackerTag','attacks[j].defenderTag','attacks[j].stars','0','attacks[j].destruction','attacks[j].defender.mapPosition','attacks[j].defender.townHallLevel','attacks[j].defender.clan.tag','attacks[j].attacker.clan.tag','attacks[j].clan.level','attacks[j].defender.clan.level','clan.startTime','clan.teamSize');`,
               charset: `UTF8MB4`
             });
           }
