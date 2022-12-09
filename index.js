@@ -37,7 +37,7 @@ const beast = new ClashClient();
 var cron = require('node-cron');
 console.log('hello');
 //miss rmd
-cron.schedule('0 6 * * Monday', () => {
+cron.schedule('0 7 * * Monday', () => {
   console.log('sending cc missers');
   (async function () {
     let test = await lib.mysql.db['@0.2.1'].query({
@@ -74,13 +74,13 @@ cron.schedule('0 6 * * Monday', () => {
           },
         ],
       });
-      await sleep(500);
+      await sleep(250);
     }
   })();
 });
 
 // cc rmd
-cron.schedule('0 8 * * Friday', () => {
+cron.schedule('0 7 * * Friday', () => {
   console.log('sending cc start');
   (async function () {
     let test = await lib.mysql.db['@0.2.1'].query({
@@ -156,7 +156,7 @@ cron.schedule('*/5 * * * *', () => {
           console.log('war over')
           var clan = await beast.getClanWar(b.result[i].clan);
           var attacks = await clan.clan.attacks;
-          //console.log(attacks)
+          var attk = await clan.opponent.attacks;
           await lib.discord.channels['@0.3.2'].messages.create({
             channel_id: `${b.result[i].war}`,
             content: ``, // required
@@ -172,14 +172,17 @@ cron.schedule('*/5 * * * *', () => {
           for (let j = 0; j < attacks.length; j++) {
             console.log('adding stats');
             await lib.mysql.db['@0.2.1'].query({
-              query: `insert into players values('${attacks[j].attackerTag}','${attacks[j].attacker.name}','${attacks[j].attacker.townHallLevel}','${attacks[j].order}','${attacks[j].attackerTag}','${attacks[j].defenderTag}','${attacks[j].stars}','0','${attacks[j].destruction}','${attacks[j].defender.mapPosition}','${attacks[j].defender.townHallLevel}','${attacks[j].defender.clan.tag}','${attacks[j].attacker.clan.tag}','${attacks[j].clan.level}','${attacks[j].defender.clan.level}','${clan.startTime}','${clan.teamSize}');`,
+              query: `insert into players values('${attacks[j].attackerTag}','${attacks[j].attacker.name}','${attacks[j].attacker.townHallLevel}','${attacks[j].order}','${attacks[j].attackerTag}','${attacks[j].defenderTag}','${attacks[j].stars}','${attacks[j].previousBestAttack ?? attacks[j].stars-attacks[j].previousBestAttack}','${attacks[j].destruction}','${attacks[j].defender.mapPosition}','${attacks[j].defender.townHallLevel}','${attacks[j].defender.clan.tag}','${attacks[j].attacker.clan.tag}','${attacks[j].clan.level}','${attacks[j].defender.clan.level}','${clan.startTime}','${clan.teamSize}');`,
               charset: `UTF8MB4`
             });
           }
-          return lib.discord.channels['@0.3.2'].messages.create({
-            channel_id: `860512303233236995`,
-            content: `<@849123406477656086>`,
-          });
+          for (let j = 0; j < attk.length; j++) {
+            console.log('adding stats');
+            await lib.mysql.db['@0.2.1'].query({
+              query: `insert into players values('${attk[j].attackerTag}','${attk[j].attacker.name}','${attk[j].attacker.townHallLevel}','${attk[j].order}','${attk[j].attackerTag}','${attk[j].defenderTag}','${attk[j].stars}','${attk[j].previousBestAttack ?? attk[j].stars-attk[j].previousBestAttack}','${attk[j].destruction}','${attk[j].defender.mapPosition}','${attk[j].defender.townHallLevel}','${attk[j].defender.clan.tag}','${attk[j].attacker.clan.tag}','${attk[j].clan.level}','${attk[j].defender.clan.level}','${clan.startTime}','${clan.teamSize}');`,
+              charset: `UTF8MB4`
+            });
+          }
         }
       }
     }
