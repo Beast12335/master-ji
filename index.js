@@ -172,7 +172,7 @@ cron.schedule('*/5 * * * *', () => {
           for (let j = 0; j < attacks.length; j++) {
             console.log('adding stats');
             await lib.mysql.db['@0.2.1'].query({
-              query: `insert into players values('attacks[j].attackerTag','attacks[j].attacker.name','attacks[j].attacker.townHallLevel','attacks[j].order','attacks[j].attackerTag','attacks[j].defenderTag','attacks[j].stars','0','attacks[j].destruction','attacks[j].defender.mapPosition','attacks[j].defender.townHallLevel','attacks[j].defender.clan.tag','attacks[j].attacker.clan.tag','attacks[j].clan.level','attacks[j].defender.clan.level','clan.startTime','clan.teamSize');`,
+              query: `insert into players values(`attacks[j].attackerTag`,`attacks[j].attacker.name`,`attacks[j].attacker.townHallLevel`,`attacks[j].order`,`attacks[j].attackerTag`,`attacks[j].defenderTag`,`attacks[j].stars`,`0`,`attacks[j].destruction`,`attacks[j].defender.mapPosition`,`attacks[j].defender.townHallLevel`,`attacks[j].defender.clan.tag`,`attacks[j].attacker.clan.tag`,`attacks[j].clan.level`,`attacks[j].defender.clan.level`,`clan.startTime`,`clan.teamSize`);`,
               charset: `UTF8MB4`
             });
           }
