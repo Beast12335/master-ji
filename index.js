@@ -172,18 +172,48 @@ cron.schedule('*/5 * * * *', () => {
           for (let j = 0; j < attacks.length; j++) {
             console.log('adding stats');
             await lib.mysql.db['@0.2.1'].query({
-              query: `insert into players values('${attacks[j].attackerTag}','${attacks[j].attacker.name}','${attacks[j].attacker.townHallLevel}','${attacks[j].order}','${attacks[j].attackerTag}','${attacks[j].defenderTag}','${attacks[j].stars}','${attacks[j].previousBestAttack ?? attacks[j].stars-attacks[j].previousBestAttack}','${attacks[j].destruction}','${attacks[j].defender.mapPosition}','${attacks[j].defender.townHallLevel}','${attacks[j].defender.clan.tag}','${attacks[j].attacker.clan.tag}','${attacks[j].clan.level}','${attacks[j].defender.clan.level}','${clan.startTime}','${clan.teamSize}');`,
+              query: `insert into players values('${attacks[j].attackerTag}','${attacks[j].attacker.name}','${attacks[j].attacker.townHallLevel}','${attacks[j].order}','${attacks[j].attackerTag}','${attacks[j].defenderTag}','${attacks[j].stars}','${attacks[j].previousBestAttack} ?? ${attacks[j].stars-attacks[j].previousBestAttack}','${attacks[j].destruction}','${attacks[j].defender.mapPosition}','${attacks[j].defender.townHallLevel}','${attacks[j].defender.clan.tag}','${attacks[j].attacker.clan.tag}','${attacks[j].clan.level}','${attacks[j].defender.clan.level}','${clan.startTime}','${clan.teamSize}');`,
               charset: `UTF8MB4`
             });
           }
           for (let j = 0; j < attk.length; j++) {
             console.log('adding stats');
             await lib.mysql.db['@0.2.1'].query({
-              query: `insert into players values('${attk[j].attackerTag}','${attk[j].attacker.name}','${attk[j].attacker.townHallLevel}','${attk[j].order}','${attk[j].attackerTag}','${attk[j].defenderTag}','${attk[j].stars}','${attk[j].previousBestAttack ?? attk[j].stars-attk[j].previousBestAttack}','${attk[j].destruction}','${attk[j].defender.mapPosition}','${attk[j].defender.townHallLevel}','${attk[j].defender.clan.tag}','${attk[j].attacker.clan.tag}','${attk[j].clan.level}','${attk[j].defender.clan.level}','${clan.startTime}','${clan.teamSize}');`,
+              query: `insert into players values('${attk[j].attackerTag}','${attk[j].attacker.name}','${attk[j].attacker.townHallLevel}','${attk[j].order}','${attk[j].attackerTag}','${attk[j].defenderTag}','${attk[j].stars}','${attk[j].previousBestAttack} ?? ${attk[j].stars-attk[j].previousBestAttack}','${attk[j].destruction}','${attk[j].defender.mapPosition}','${attk[j].defender.townHallLevel}','${attk[j].defender.clan.tag}','${attk[j].attacker.clan.tag}','${attk[j].clan.level}','${attk[j].defender.clan.level}','${clan.startTime}','${clan.teamSize}');`,
               charset: `UTF8MB4`
             });
           }
-        }
+          const {registerFont, createCanvas, loadImage} = require('canvas');
+          const comicsans = require('@canvas-fonts/tahoma');
+          registerFont(comicsans, {family: 'Tahoma'});
+          const canvas = createCanvas(375,200);
+          const ctx = canvas.getContext('2d');
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          let bill = `https://media.discordapp.net/attachments/860512303233236995/1050966121781674044/IMG_20221210_081343.jpg`;
+          let image = await loadImage(bill);
+          ctx.drawImage(image, 2, 2, 375,200);
+          ctx.font = 'bold 25px "Comic Sans"';
+          ctx.fillStyle = '#FFFFFF';
+          ctx.textAlign = 'center';
+          ctx.fillText(clan.opponent.destruction,250,132) 
+          ctx.fillText(clan.clan.destruction,135,132) 
+          ctx.font = 'bold 40px " Comic Sans"';
+          ctx.fillText(clan.clan.stars,140,79) 
+          ctx.fillText(clan.opponent.stars,250,79)
+          ctx.font= 'bold 15px " Comic Sans"';
+          ctx.fillText(clan.clan.name,120,173) 
+          ctx.fillText(clan.opponent.name,238,173) 
+          await lib.discord.channels['@0.3.2'].messages.create({
+            channel_id: b.result[i].war,
+            content: `  `,
+            attachments: [
+              {
+                'file': canvas.toBuffer(),
+                'filename': `result.png`
+              }
+            ]
+          });
+     }
       }
     }
   })();
