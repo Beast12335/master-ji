@@ -252,7 +252,7 @@ console.log('loading cc');
     }
       })();
     });
-cron.schedule('33 16 * * Monday', () => {
+cron.schedule('43 16 * * Monday', () => {
 console.log('loading cc');
 (async function () {
   let test = await lib.mysql.db['@0.2.1'].query({
@@ -261,20 +261,24 @@ console.log('loading cc');
   });
   for (let i=0;i<test.result.length;i++) {
     let n = await beast.getCapitalRaidSeasons(test.result[i].clan)
-    if (JSON.stringify(n[0].endTime).slice(5,7) == new Date().getMonth()+1 && JSON.stringify(n[0].endTime).slice(8,10) == new Date().getDate()) {
-      await lib.mysql.db['@0.2.1'].query({
-        query: `insert into record values ('${test.result[i].clan}','${n[0].capitalTotalLoot}','${n[0].raidsCompleted}','${n[0].totalAttacks}','${n[0].offensiveReward}','${n[0].defensiveReward}','${n[0].endTime}')`,
-        charset: `UTF8MB4`
-      });
-      for (let j=0;j<n[0].members.length;j++) {
+    try{
+      if (JSON.stringify(n[0].endTime).slice(5,7) == new Date().getMonth()+1 && JSON.stringify(n[0].endTime).slice(8,10) == new Date().getDate()) {
         await lib.mysql.db['@0.2.1'].query({
-          query: `insert into cplayers values('${n[0].members[j].tag}','${n[0].members[j].name}','${n[0].members[j].attacks}','${n[0].members[j].capitalResourcesLooted}','${test.result[i].clan}','${n[0].endTime}');`,
+          query: `insert into record values ('${test.result[i].clan}','${n[0].capitalTotalLoot}','${n[0].raidsCompleted}','${n[0].totalAttacks}','${n[0].offensiveReward}','${n[0].defensiveReward}','${n[0].endTime}')`,
           charset: `UTF8MB4`
-      });
-      await sleep(50)
+        });
+        for (let j=0;j<n[0].members.length;j++) {
+          await lib.mysql.db['@0.2.1'].query({
+            query: `insert into cplayers values('${n[0].members[j].tag}','${n[0].members[j].name}','${n[0].members[j].attacks}','${n[0].members[j].capitalResourcesLooted}','${test.result[i].clan}','${n[0].endTime}');`,
+            charset: `UTF8MB4`
+        });
+        await sleep(50)
+        }
+        }
       }
-      }
-    }
+     }catch(e) {
+        console.log(e) 
+        continue  }
       })();
     });
 
