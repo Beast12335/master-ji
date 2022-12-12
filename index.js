@@ -80,7 +80,7 @@ cron.schedule('0 7 * * Monday', () => {
 });
 
 // cc rmd
-cron.schedule('0 7 * * Friday', () => {
+cron.schedule('1 7 * * Friday', () => {
   console.log('sending cc start');
   (async function () {
     let test = await lib.mysql.db['@0.2.1'].query({
@@ -157,6 +157,14 @@ cron.schedule('*/5 * * * *', () => {
           var clan = await beast.getClanWar(b.result[i].clan);
           var attacks = await clan.clan.attacks;
           var attk = await clan.opponent.attacks;
+          let result;
+          let res;
+          if (clan.status === 'win') {
+            result = 'true'}
+          else{result = 'false'}
+          if (result === 'true') {
+            res = 'false'}
+          else{res = 'true'}
           await lib.discord.channels['@0.3.2'].messages.create({
             channel_id: `${b.result[i].war}`,
             content: ``, // required
@@ -172,14 +180,14 @@ cron.schedule('*/5 * * * *', () => {
           for (let j = 0; j < attacks.length; j++) {
             console.log('adding stats');
             await lib.mysql.db['@0.2.1'].query({
-              query: `insert into players values('${attacks[j].attackerTag}','${attacks[j].attacker.name}','${attacks[j].attacker.townHallLevel}','${attacks[j].order}','${attacks[j].attackerTag}','${attacks[j].defenderTag}','${attacks[j].stars}','${attacks[j].previousBestAttack} ?? ${attacks[j].stars-attacks[j].previousBestAttack}','${attacks[j].destruction}','${attacks[j].defender.mapPosition}','${attacks[j].defender.townHallLevel}','${attacks[j].defender.clan.tag}','${attacks[j].attacker.clan.tag}','${attacks[j].clan.level}','${attacks[j].defender.clan.level}','${clan.startTime}','${clan.teamSize}');`,
+              query: `insert into players values('${attacks[j].attackerTag}','${attacks[j].attacker.name}','${attacks[j].attacker.townHallLevel}','${attacks[j].order}','${attacks[j].attackerTag}','${attacks[j].defenderTag}','${attacks[j].stars}','${attacks[j].duration}','${attacks[j].destruction}','${attacks[j].defender.mapPosition}','${attacks[j].defender.townHallLevel}','${attacks[j].defender.clan.tag}','${attacks[j].defender.clan.name}','${attacks[j].attacker.clan.tag}','${attacks[j].clan.name}','${attacks[j].clan.level}','${attacks[j].defender.clan.level}','${clan.startTime}','${clan.teamSize}','${result}');`,
               charset: `UTF8MB4`
             });
           }
           for (let j = 0; j < attk.length; j++) {
             console.log('adding stats');
             await lib.mysql.db['@0.2.1'].query({
-              query: `insert into players values('${attk[j].attackerTag}','${attk[j].attacker.name}','${attk[j].attacker.townHallLevel}','${attk[j].order}','${attk[j].attackerTag}','${attk[j].defenderTag}','${attk[j].stars}','${attk[j].previousBestAttack} ?? ${attk[j].stars-attk[j].previousBestAttack}','${attk[j].destruction}','${attk[j].defender.mapPosition}','${attk[j].defender.townHallLevel}','${attk[j].defender.clan.tag}','${attk[j].attacker.clan.tag}','${attk[j].clan.level}','${attk[j].defender.clan.level}','${clan.startTime}','${clan.teamSize}');`,
+              query: `insert into players values('${attk[j].attackerTag}','${attk[j].attacker.name}','${attk[j].attacker.townHallLevel}','${attk[j].order}','${attk[j].attackerTag}','${attk[j].defenderTag}','${attk[j].stars}','${attk[j].duration}','${attk[j].destruction}','${attk[j].defender.mapPosition}','${attk[j].defender.townHallLevel}','${attk[j].defender.clan.tag}','${attk[j].defender.clan.name}','${attk[j].attacker.clan.tag}','${attk[j].clan.name}','${attk[j].clan.level}','${attk[j].defender.clan.level}','${clan.startTime}','${clan.teamSize}','${res}');`,
               charset: `UTF8MB4`
             });
           }
@@ -218,6 +226,57 @@ cron.schedule('*/5 * * * *', () => {
     }
   })();
 });
+
+cron.schedule('0 7 * * Monday', () => {
+console.log('loading cc');
+(async function () {
+  let test = await lib.mysql.db['@0.2.1'].query({
+    query: `select * from master where channel  != '0';`,
+    charset: `UTF8MB4`,
+  });
+  for (let i=0;i<test.result.length;i++) {
+    let n = await client.getCapitalRaidSeasons(test.result[i].clan)
+    if (JSON.stringify(n[0].endTime).slice(5,7) == new Date().getMonth()+1 && JSON.stringify(n[0].endTime).slice(8,10) == new Date().getDate()) {
+      await lib.mysql.db['@0.2.1'].query({
+        query: `insert into record values ('${test.result[i].clan}','${n[0].capitalTotalLoot}','${n[0].raidsCompleted}','${n[0].totalAttacks}','${n[0].offensiveReward}','${n[0].defensiveReward}','${n[0].endTime}')`,
+        charset: `UTF8MB4`
+      });
+      for (let j=0;j<n[0].members.length;j++) {
+        await lib.mysql.db['@0.2.1'].query({
+          query: `insert into cplayers values('${n[0].members[j].tag}','${n[0].members[j].name}','${n[0].members[j].attacks}','${n[0].members[j].capitalResourcesLooted}','${test.result[i].clan}','${n[0].endTime}');`,
+          charset: `UTF8MB4`
+      });
+      await sleep(50)
+      }
+      }
+    }
+      })();
+    });
+cron.schedule('29 16 * * Monday', () => {
+console.log('loading cc');
+(async function () {
+  let test = await lib.mysql.db['@0.2.1'].query({
+    query: `select * from master where channel  != '0';`,
+    charset: `UTF8MB4`,
+  });
+  for (let i=0;i<test.result.length;i++) {
+    let n = await client.getCapitalRaidSeasons(test.result[i].clan)
+    if (JSON.stringify(n[0].endTime).slice(5,7) == new Date().getMonth()+1 && JSON.stringify(n[0].endTime).slice(8,10) == new Date().getDate()) {
+      await lib.mysql.db['@0.2.1'].query({
+        query: `insert into record values ('${test.result[i].clan}','${n[0].capitalTotalLoot}','${n[0].raidsCompleted}','${n[0].totalAttacks}','${n[0].offensiveReward}','${n[0].defensiveReward}','${n[0].endTime}')`,
+        charset: `UTF8MB4`
+      });
+      for (let j=0;j<n[0].members.length;j++) {
+        await lib.mysql.db['@0.2.1'].query({
+          query: `insert into cplayers values('${n[0].members[j].tag}','${n[0].members[j].name}','${n[0].members[j].attacks}','${n[0].members[j].capitalResourcesLooted}','${test.result[i].clan}','${n[0].endTime}');`,
+          charset: `UTF8MB4`
+      });
+      await sleep(50)
+      }
+      }
+    }
+      })();
+    });
 
 (async function () {
   await beast.login({
