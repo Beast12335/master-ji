@@ -231,7 +231,7 @@ cron.schedule('0 7 * * Monday', () => {
 console.log('loading cc');
 (async function () {
   let test = await lib.mysql.db['@0.2.1'].query({
-    query: `select * from master where channel  != '0';`,
+    query: `select * from master;`,
     charset: `UTF8MB4`,
   });
   for (let i=0;i<test.result.length;i++) {
@@ -260,7 +260,7 @@ cron.schedule('26 6 * * Tuesday', () => {
 console.log('loading cc');
 (async function () {
   let test = await lib.mysql.db['@0.2.1'].query({
-    query: `select * from master where channel  != '0';`,
+    query: `select * from master;`,
     charset: `UTF8MB4`,
   });
   for (let i=0;i<test.result.length;i++) {
