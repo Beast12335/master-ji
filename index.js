@@ -256,7 +256,7 @@ console.log('loading cc');
     }
       })();
     });
-cron.schedule('17 9 * * Tuesday', () => {
+cron.schedule('22 9 * * Tuesday', () => {
   console.log('loading cc');
   (async function () {
     let test = await lib.mysql.db['@0.2.1'].query({
@@ -269,7 +269,7 @@ cron.schedule('17 9 * * Tuesday', () => {
         if (!(n.length ===0)) {
           console.log('bittu')
           console.log(JSON.stringify(n[0].endTime).slice(6,8) + JSON.stringify(n[0].endTime).slice(9,11)) 
-          if (JSON.stringify(n[0].endTime).slice(6,8) == JSON.stringify(new Date().getMonth()+1) && JSON.stringify(n[0].endTime).slice(9,11) == JSON.stringify(new Date().getDate()+1)) {
+          if (JSON.stringify(n[0].endTime).slice(6,8) == JSON.stringify(new Date().getMonth()+1) && JSON.stringify(n[0].endTime).slice(9,11) == JSON.stringify(new Date().getDate()-1)) {
             console.log('adding for ' + test.result[i].clan)
             await lib.mysql.db['@0.2.1'].query({
               query: `insert into record values ('${test.result[i].clan}','${n[0].capitalTotalLoot}','${n[0].raidsCompleted}','${n[0].totalAttacks}','${n[0].offensiveReward}','${n[0].defensiveReward}','${n[0].endTime}')`,
