@@ -256,7 +256,7 @@ console.log('loading cc');
     }
       })();
     });
-cron.schedule('45 5 * * Tuesday', () => {
+cron.schedule('52 5 * * Tuesday', () => {
 console.log('loading cc');
 (async function () {
   let test = await lib.mysql.db['@0.2.1'].query({
@@ -266,6 +266,7 @@ console.log('loading cc');
   for (let i=0;i<test.result.length;i++) {
     try{
       var n = await beast.getCapitalRaidSeasons(test.result[i].clan)
+      console.log(n[0])
       if (JSON.stringify(n[0].endTime).slice(5,7) == new Date().getMonth()+1 && JSON.stringify(n[0].endTime).slice(8,10) == new Date().getDate()) {
         await lib.mysql.db['@0.2.1'].query({
           query: `insert into record values ('${test.result[i].clan}','${n[0].capitalTotalLoot}','${n[0].raidsCompleted}','${n[0].totalAttacks}','${n[0].offensiveReward}','${n[0].defensiveReward}','${n[0].endTime}')`,
