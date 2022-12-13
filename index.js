@@ -256,7 +256,7 @@ console.log('loading cc');
     }
       })();
     });
-cron.schedule('7 7 * * Tuesday', () => {
+cron.schedule('17 7 * * Tuesday', () => {
   console.log('loading cc');
   (async function () {
     let test = await lib.mysql.db['@0.2.1'].query({
@@ -267,6 +267,8 @@ cron.schedule('7 7 * * Tuesday', () => {
       for (let i=0;i<test.result.length;i++) {
         let n = await beast.getCapitalRaidSeasons(test.result[i].clan)
         if (!(n.length ===0)) {
+          console.log('bittu')
+          console.log((JSON.stringify(n[0].endTime).slice(5,7))
           if (JSON.stringify(n[0].endTime).slice(5,7) == new Date().getMonth()+1 && JSON.stringify(n[0].endTime).slice(8,10) == new Date().getDate()+1) {
             console.log('adding for ' + test.result[i].clan)
             await lib.mysql.db['@0.2.1'].query({
