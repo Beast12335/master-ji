@@ -256,7 +256,7 @@ console.log('loading cc');
     }
       })();
     });
-cron.schedule('54 2 * * Tuesday', () => {
+cron.schedule('45 5 * * Tuesday', () => {
 console.log('loading cc');
 (async function () {
   let test = await lib.mysql.db['@0.2.1'].query({
