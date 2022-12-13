@@ -265,7 +265,7 @@ console.log('loading cc');
   });
   for (let i=0;i<test.result.length;i++) {
     try{
-      let n = await beast.getCapitalRaidSeasons(test.result[i].clan)
+      var n = await beast.getCapitalRaidSeasons(test.result[i].clan)
       if (JSON.stringify(n[0].endTime).slice(5,7) == new Date().getMonth()+1 && JSON.stringify(n[0].endTime).slice(8,10) == new Date().getDate()) {
         await lib.mysql.db['@0.2.1'].query({
           query: `insert into record values ('${test.result[i].clan}','${n[0].capitalTotalLoot}','${n[0].raidsCompleted}','${n[0].totalAttacks}','${n[0].offensiveReward}','${n[0].defensiveReward}','${n[0].endTime}')`,
